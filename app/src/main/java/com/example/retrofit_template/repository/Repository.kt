@@ -10,8 +10,8 @@ class Repository {
         return RetrofitInstance.api.getPost()
     }
 
-    suspend fun getPosts2(number: Int): Response<Post>{
-        return RetrofitInstance.api.getPost2(number)
+    suspend fun getPosts2(number: Int, auth: String): Response<Post>{
+        return RetrofitInstance.api.getPost2(number, auth)
     }
 
     suspend fun getCustomPosts(userId: Int, sort: String, order: String): Response<List<Post>>{
