@@ -21,9 +21,15 @@ class MainActivity : AppCompatActivity() {
         viewModel.getPost()
         viewModel.myResponse.observe(this, Observer { response ->
             if(response.isSuccessful){
-                kotlin.io.println(response)
+                println(response.body()?.userId.toString())
+                println(response.body()?.id.toString())
+                println(response.body()?.title!!)
+                println(response.body()?.body!!)
             }else{
                 println("Error")
+                println(response)
+
+                
             }
         })
     }
