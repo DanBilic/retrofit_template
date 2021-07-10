@@ -40,7 +40,8 @@ class MainActivity : AppCompatActivity() {
         viewModel.pushPost(myPost)
         viewModel.myResponse.observe(this, Observer { response ->
             if(response.isSuccessful){
-                Log.d("Main", response.body().toString())
+                Log.d("Body:", response.body().toString())
+                Log.d("Headers:", response.headers().toString())
             }else{
                 Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
             }
