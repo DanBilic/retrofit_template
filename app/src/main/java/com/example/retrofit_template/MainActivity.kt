@@ -2,17 +2,22 @@ package com.example.retrofit_template
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.retrofit_template.adapter.MyAdapter
 import com.example.retrofit_template.databinding.ActivityMainBinding
 import com.example.retrofit_template.repository.Repository
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
 
     private lateinit var binding: ActivityMainBinding
+    private val myAdapter by lazy {MyAdapter()}
 
 
 
@@ -23,10 +28,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setUpRecyclerView()
+
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+        viewModel.getCustomPosts(2, "id", "desc")
+        viewModel.myCustomPosts.observe(this, Observer { response ->
+            if(response.isSuccessful){
+                response.body()?.let { myAdapter.setData(it) }
+            }else{
+                Toast.makeText(this, response.code(), Toast.LENGTH_SHORT).show()
+            }
 
+        })
+        /*
         val options: HashMap<String, String> = HashMap()
         options["_sort"] = "id"
         options["_order"] = "desc"
@@ -43,8 +59,15 @@ class MainActivity : AppCompatActivity() {
                 }
             })
         }
+        */
 
 
 
+
+    }
+
+    private fun setUpRecyclerView(){
+        binding.recyclerView.adapter = myAdapter
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
     }
 }
