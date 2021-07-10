@@ -26,4 +26,9 @@ interface SimpleApi {
         @Query("userId") userId: Int,
         @QueryMap options: Map<String, String>
     ): Response<List<Post>>
+
+    @POST("posts")
+    suspend fun pushPost(
+        @Body post: Post
+    ): Response<Post>
 }
