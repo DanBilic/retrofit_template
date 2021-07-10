@@ -5,32 +5,43 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
+import com.example.retrofit_template.databinding.ActivityMainBinding
 import com.example.retrofit_template.repository.Repository
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
 
+    private lateinit var binding: ActivityMainBinding
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val repository = Repository()
         val viewModelFactory = MainViewModelFactory(repository)
         viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
-        viewModel.getPost()
-        viewModel.myResponse.observe(this, Observer { response ->
-            if(response.isSuccessful){
-                println(response.body()?.userId.toString())
-                println(response.body()?.id.toString())
-                println(response.body()?.title!!)
-                println(response.body()?.body!!)
-            }else{
-                println("Error")
-                println(response)
 
-                
-            }
-        })
+
+        binding.button.setOnClickListener {
+
+            val myNumber = binding.numberEditText.text.toString()
+            viewModel.getPost2(Integer.parseInt(myNumber))
+            viewModel.myResponse2.observe(this, Observer { response ->
+                if(response.isSuccessful){
+                    binding.textView.text = response.body().toString()
+                }else{
+                    binding.textView.text = response.body().toString()
+                }
+            })
+        }
+
+
+
     }
 }
